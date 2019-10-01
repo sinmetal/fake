@@ -1,4 +1,4 @@
-package fakestorage
+package storage
 
 import (
 	"fmt"
