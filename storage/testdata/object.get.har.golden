@@ -1,0 +1,127 @@
+{
+  "log": {
+    "version": "1.2",
+    "creator": {
+      "name": "github.com/vvakame/til/go/har-log",
+      "version": "0.0.1"
+    },
+    "entries": [
+      {
+        "startedDateTime": "2019-10-03T14:03:44+09:00",
+        "time": 44.609434,
+        "request": {
+          "method": "GET",
+          "url": "https://storage.googleapis.com/hoge/hoge.txt",
+          "httpVersion": "HTTP/1.1",
+          "cookies": [],
+          "headers": [],
+          "queryString": [],
+          "headersSize": -1,
+          "bodySize": -1
+        },
+        "response": {
+          "status": 200,
+          "statusText": "",
+          "httpVersion": "HTTP/2.0",
+          "cookies": [],
+          "headers": [
+            {
+              "name": "X-Goog-Generation",
+              "value": "1569837707444808"
+            },
+            {
+              "name": "X-Goog-Stored-Content-Length",
+              "value": "25"
+            },
+            {
+              "name": "Content-Length",
+              "value": "25"
+            },
+            {
+              "name": "Age",
+              "value": "123"
+            },
+            {
+              "name": "Last-Modified",
+              "value": "Mon, 30 Sep 2019 10:01:47 GMT"
+            },
+            {
+              "name": "X-Goog-Stored-Content-Encoding",
+              "value": "identity"
+            },
+            {
+              "name": "Accept-Ranges",
+              "value": "bytes"
+            },
+            {
+              "name": "Cache-Control",
+              "value": "public, max-age=3600"
+            },
+            {
+              "name": "Server",
+              "value": "UploadServer"
+            },
+            {
+              "name": "X-Guploader-Uploadid",
+              "value": "AEnB2Uo1cF3mggXnexsDdpXNsnXNuVenv1zSBsW_WTZ8rPDhuMaAjzn9Bfj7O0xi2vXV0-H3taoZ8ZR0wBue-afLLlY11Jm3Ag"
+            },
+            {
+              "name": "Date",
+              "value": "Thu, 03 Oct 2019 05:01:42 GMT"
+            },
+            {
+              "name": "Etag",
+              "value": "\"c4d22707e0d79bd01e33fe19a5e21487\""
+            },
+            {
+              "name": "X-Goog-Storage-Class",
+              "value": "REGIONAL"
+            },
+            {
+              "name": "Alt-Svc",
+              "value": "quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000"
+            },
+            {
+              "name": "Expires",
+              "value": "Thu, 03 Oct 2019 06:01:42 GMT"
+            },
+            {
+              "name": "X-Goog-Metageneration",
+              "value": "2"
+            },
+            {
+              "name": "Content-Type",
+              "value": "text/plain"
+            },
+            {
+              "name": "X-Goog-Hash",
+              "value": "crc32c=CrEDEg=="
+            },
+            {
+              "name": "X-Goog-Hash",
+              "value": "md5=xNInB+DXm9AeM/4ZpeIUhw=="
+            }
+          ],
+          "content": {
+            "size": 25,
+            "mimeType": "text/plain",
+            "text": "{\"message\": \"Hello Hoge\"}"
+          },
+          "redirectURL": "",
+          "headersSize": -1,
+          "bodySize": 25
+        },
+        "cache": {},
+        "timings": {
+          "blocked": -0.012133,
+          "dns": -0.000001,
+          "connect": 0.00065,
+          "send": 0.111354,
+          "wait": 44.33395,
+          "receive": 0.151347,
+          "ssl": -0.000001
+        }
+      }
+    ]
+  }
+}
