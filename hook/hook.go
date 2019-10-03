@@ -9,27 +9,22 @@ import (
 )
 
 type Hooker struct {
-	transport *Transport
-	Client    *http.Client
+	Transport *Transport
 }
 
 func (h *Hooker) GetRequest() *HookRequest {
-	return h.transport.Request
+	return h.Transport.Request
 }
 
 func (h *Hooker) GetResponse() *HookResponse {
-	return h.transport.Response
+	return h.Transport.Response
 }
 
 func NewHooker(t *testing.T) *Hooker {
 	t.Helper()
 
-	transport := &Transport{}
 	return &Hooker{
-		transport: transport,
-		Client: &http.Client{
-			Transport: transport,
-		},
+		Transport: &Transport{},
 	}
 }
 
@@ -48,14 +43,20 @@ type HookResponse struct {
 var _ http.RoundTripper = &Transport{}
 
 type Transport struct {
-	Request  *HookRequest
-	Response *HookResponse
+	Transport http.RoundTripper
+	Request   *HookRequest
+	Response  *HookResponse
 }
 
 func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
 	t.copyRequest(req)
 
-	resp, err := http.DefaultTransport.RoundTrip(req)
+	baseRoundTripper := t.Transport
+	if baseRoundTripper == nil {
+		baseRoundTripper = http.DefaultTransport
+	}
+
+	resp, err := baseRoundTripper.RoundTrip(req)
 	if err != nil {
 		return resp, err
 	}

@@ -4,7 +4,7 @@
     "Opaque": "",
     "User": null,
     "Host": "storage.googleapis.com",
-    "Path": "/hoge/hoge.txt",
+    "Path": "/sinmetal-ci-fake/hoge.txt",
     "RawPath": "",
     "ForceQuery": false,
     "RawQuery": "",

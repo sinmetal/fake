@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -77,6 +78,10 @@ func compareNVPArray(t *testing.T, title string, want, got []*harlog.NVP) {
 		if !ok {
 			t.Errorf("want %s %s but notfound", title, w.Name)
 		}
+		if strings.ToLower(w.Name) == "content-type" {
+			compareContentType(t, w.Value, gv)
+			continue
+		}
 		if w.Value != gv {
 			t.Errorf("want %s[%s] is %v but got %v", title, w.Name, w.Value, gv)
 		}
@@ -89,4 +94,15 @@ func nvpArrayToMap(array []*harlog.NVP) map[string]string {
 		m[v.Name] = v.Value
 	}
 	return m
+}
+
+// compareContentType is ContentTypeを比較する
+// ContentTypeには可変文字が入ってくることがあるので、それの対処をする
+func compareContentType(t *testing.T, want, got string) {
+	if strings.HasPrefix(want, "multipart/related;") && strings.HasPrefix(got, "multipart/related;") {
+		return
+	}
+	if want != got {
+		t.Errorf("want ContentType is %v but got %v", want, got)
+	}
 }
