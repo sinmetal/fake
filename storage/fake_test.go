@@ -3,11 +3,14 @@ package storage_test
 import (
 	"context"
 	"fmt"
+	"github.com/sinmetal/fake/hook/hars"
 	"io/ioutil"
+	"net/http"
 	"testing"
 
 	"cloud.google.com/go/storage"
-	"github.com/sinmetal/fake"
+	"github.com/sinmetal/fake/hook"
+	"github.com/vvakame/go-harlog"
 	"google.golang.org/api/option"
 
 	. "github.com/sinmetal/fake/storage"
@@ -44,7 +47,7 @@ func TestGetObject(t *testing.T) {
 func TestRealGetObject(t *testing.T) {
 	ctx := context.Background()
 
-	hooker := fake.NewHooker(t)
+	hooker := hook.NewHooker(t)
 	stg, err := storage.NewClient(ctx, option.WithHTTPClient(hooker.Client))
 	if err != nil {
 		t.Fatal(err)
@@ -56,8 +59,29 @@ func TestRealGetObject(t *testing.T) {
 	}
 
 	req := hooker.GetRequest()
-	fake.CompareHookRequest(t, "object.get.request.golden", req)
+	hook.CompareHookRequest(t, "object.get.request.golden", req)
 
 	resp := hooker.GetResponse()
-	fake.CompareHookResponse(t, "object.get.response.golden", resp)
+	hook.CompareHookResponse(t, "object.get.response.golden", resp)
+}
+
+func TestRealGetObjectHar(t *testing.T) {
+	ctx := context.Background()
+
+	har := &harlog.Transport{}
+	hc := &http.Client{
+		Transport: har,
+	}
+
+	stg, err := storage.NewClient(ctx, option.WithHTTPClient(hc))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = stg.Bucket("hoge").Object("hoge.txt").NewReader(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	hars.Compare(t, "object.get.har.golden", har.HAR())
 }

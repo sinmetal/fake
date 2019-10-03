@@ -1,4 +1,4 @@
-package fake
+package hook
 
 import (
 	"bytes"
@@ -11,17 +11,27 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-var update = flag.Bool("update", false, "update golden file")
+var Update = flag.Bool("update", false, "update golden file")
+
+func IgnoreHeaderKey(key string) bool {
+	keys := []string{"Expires", "Age", "X-GUploader-UploadID"}
+	for _, v := range keys {
+		if key == v {
+			return true
+		}
+	}
+	return false
+}
 
 func CompareHookRequest(t *testing.T, goldenPath string, req *HookRequest) {
 	t.Helper()
 
-	got, err := json.Marshal(req)
+	got, err := json.MarshalIndent(req, "", "  ")
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 	fn := filepath.Join("testdata", goldenPath)
-	if *update {
+	if *Update {
 		t.Logf("update %s", goldenPath)
 		if err := ioutil.WriteFile(fn, got, 0644); err != nil {
 			t.Fatal("unexpected error:", err)
@@ -39,12 +49,12 @@ func CompareHookRequest(t *testing.T, goldenPath string, req *HookRequest) {
 func CompareHookResponse(t *testing.T, goldenPath string, resp *HookResponse) {
 	t.Helper()
 
-	got, err := json.Marshal(resp)
+	got, err := json.MarshalIndent(resp, "", "  ")
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 	fn := filepath.Join("testdata", goldenPath)
-	if *update {
+	if *Update {
 		t.Logf("update %s", goldenPath)
 		if err := ioutil.WriteFile(fn, got, 0644); err != nil {
 			t.Fatal("unexpected error:", err)
