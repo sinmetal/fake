@@ -6,6 +6,7 @@ import (
 	"flag"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -14,9 +15,9 @@ import (
 var Update = flag.Bool("update", false, "update golden file")
 
 func IgnoreHeaderKey(key string) bool {
-	keys := []string{"Expires", "Age", "X-GUploader-UploadID"}
+	keys := []string{"Expires", "Age", "X-GUploader-UploadID", "Alt-Svc", "Date"}
 	for _, v := range keys {
-		if key == v {
+		if strings.ToLower(key) == strings.ToLower(v) {
 			return true
 		}
 	}
@@ -69,24 +70,23 @@ func CompareHookResponse(t *testing.T, goldenPath string, resp *HookResponse) {
 		t.Fatal("unexpected error:", err)
 	}
 
-	compResp := HookResponse{
-		Header: copyUnstableHeader(t, want.Header, resp.Header),
-		Body:   resp.Body,
-	}
-
-	if !cmp.Equal(want, compResp) {
-		t.Errorf("want HookResponse : %+v but got %+v", want, resp)
+	compareHeader(t, want.Header, resp.Header)
+	if !cmp.Equal(want.Body, resp.Body) {
+		t.Errorf("want HookResponse.Body : %+v but got %+v", string(want.Body), string(resp.Body))
 	}
 }
 
-// copyUnstableHeader is 動的に変わる値を期待する値で埋めてしまう
-func copyUnstableHeader(t *testing.T, want, got map[string][]string) map[string][]string {
-	copyKeys := []string{"Expires", "Age", "X-GUploader-UploadID"}
-	for _, key := range copyKeys {
-		_, ok := want[key]
-		if ok {
-			got[key] = want[key]
+func compareHeader(t *testing.T, want, got map[string][]string) {
+	for k, v := range want {
+		if IgnoreHeaderKey(k) {
+			continue
+		}
+		gv, ok := got[k]
+		if !ok {
+			t.Errorf("want %s but notfound", k)
+		}
+		if !cmp.Equal(v, gv) {
+			t.Errorf("want %s is %v but got %v", k, v, gv)
 		}
 	}
-	return got
 }

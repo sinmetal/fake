@@ -41,7 +41,7 @@ func Compare(t *testing.T, goldenPath string, har *harlog.HARContainer) {
 
 func compare(t *testing.T, want, got *harlog.HARContainer) {
 	if e, g := len(want.Log.Entries), len(got.Log.Entries); e != g {
-		t.Fatalf("want Entries.len is %v but got %v")
+		t.Fatalf("want Entries.len is %v but got %v", e, g)
 	}
 
 	for i, v := range want.Log.Entries {
