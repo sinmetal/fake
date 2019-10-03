@@ -3,13 +3,13 @@ package storage_test
 import (
 	"context"
 	"fmt"
-	"github.com/sinmetal/fake/hook/hars"
 	"io/ioutil"
 	"net/http"
 	"testing"
 
 	"cloud.google.com/go/storage"
 	"github.com/sinmetal/fake/hook"
+	"github.com/sinmetal/fake/hook/hars"
 	"github.com/vvakame/go-harlog"
 	"google.golang.org/api/option"
 

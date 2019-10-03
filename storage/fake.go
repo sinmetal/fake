@@ -3,7 +3,6 @@ package storage
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 	"testing"
@@ -18,8 +17,9 @@ func NewFaker(t *testing.T) *Faker {
 	t.Helper()
 
 	transport := &Transport{
-		DropRequest:  true,
-		FakeResponse: defaultFakeResponse(),
+		fakeResponses: &fakeResponses{
+			m: make(map[string]*http.Response),
+		},
 	}
 	return &Faker{
 		transport: transport,
@@ -29,7 +29,40 @@ func NewFaker(t *testing.T) *Faker {
 	}
 }
 
-func defaultFakeResponse() *http.Response {
+var _ http.RoundTripper = &Transport{}
+
+type Transport struct {
+	t             *testing.T
+	Transport     http.RoundTripper
+	fakeResponses *fakeResponses
+}
+
+func (tran *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
+	return tran.fakeResponses.Get(req.URL.String(), req.Method), nil
+}
+
+type fakeResponses struct {
+	m map[string]*http.Response
+}
+
+func (f *fakeResponses) key(url string, method string) string {
+	return fmt.Sprintf("%s-%s", url, strings.ToUpper(method))
+}
+
+func (f *fakeResponses) Add(url string, method string, response *http.Response) {
+	f.m[f.key(url, method)] = response
+}
+
+func (f *fakeResponses) Get(url string, method string) *http.Response {
+	v, ok := f.m[f.key(url, method)]
+	if !ok {
+		// TODO 適当なやつを返す
+		return GetObjectOKResponse()
+	}
+	return v
+}
+
+func GetObjectOKResponse() *http.Response {
 	header := make(map[string][]string)
 	header["Accept-Ranges"] = []string{"bytes"}
 	header["Age"] = []string{"268"}
@@ -58,83 +91,4 @@ func defaultFakeResponse() *http.Response {
 		Body:          r,
 		ContentLength: 25,
 	}
-}
-
-func NewFakeHTTPClient(t *testing.T) *http.Client {
-	t.Helper()
-
-	return &http.Client{
-		Transport: &Transport{},
-	}
-}
-
-// Transport implements http.RoundTripper. When set as Transport of http.Client, it executes HTTP requests with logging.
-// No field is mandatory.
-type Transport struct {
-	Transport    http.RoundTripper
-	LogRequest   func(req *http.Request)
-	LogResponse  func(resp *http.Response)
-	DropRequest  bool
-	FakeResponse *http.Response
-}
-
-var DefaultTransport = &Transport{
-	Transport: http.DefaultTransport,
-}
-
-var DefaultLogRequest = func(req *http.Request) {
-	log.Printf("--> %s %s", req.Method, req.URL)
-}
-
-var DefaultLogResponse = func(resp *http.Response) {
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
-	}
-
-	log.Printf("fakestorage : response status = %v, header = %v, body %s", resp.Status, resp.Header, string(body))
-}
-
-func (t *Transport) RoundTrip(req *http.Request) (*http.Response, error) {
-	if t.DropRequest {
-		return t.FakeResponse, nil
-	}
-	t.logRequest(req)
-
-	resp, err := t.transport().RoundTrip(req)
-	if err != nil {
-		return resp, err
-	}
-
-	t.logResponse(resp)
-
-	if t.FakeResponse != nil {
-		fmt.Println("Fake Response !!!")
-		return t.FakeResponse, nil
-	}
-	return resp, err
-}
-
-func (t *Transport) logRequest(req *http.Request) {
-	if t.LogRequest != nil {
-		t.LogRequest(req)
-	} else {
-		DefaultLogRequest(req)
-	}
-}
-
-func (t *Transport) logResponse(resp *http.Response) {
-	if t.LogResponse != nil {
-		t.LogResponse(resp)
-	} else {
-		DefaultLogResponse(resp)
-	}
-}
-
-func (t *Transport) transport() http.RoundTripper {
-	if t.Transport != nil {
-		return t.Transport
-	}
-
-	return http.DefaultTransport
 }
