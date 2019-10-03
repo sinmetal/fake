@@ -2,16 +2,16 @@
   "log": {
     "version": "1.2",
     "creator": {
-      "name": "github.com/vvakame/til/go/har-log",
+      "name": "github.com/vvakame/go-harlog",
       "version": "0.0.1"
     },
     "entries": [
       {
-        "startedDateTime": "2019-10-03T14:03:44+09:00",
-        "time": 44.609434,
+        "startedDateTime": "2019-10-03T19:58:23+09:00",
+        "time": 216.306156,
         "request": {
           "method": "GET",
-          "url": "https://storage.googleapis.com/hoge/hoge.txt",
+          "url": "https://storage.googleapis.com/sinmetal-ci-fake/hoge.txt",
           "httpVersion": "HTTP/1.1",
           "cookies": [],
           "headers": [],
@@ -26,36 +26,20 @@
           "cookies": [],
           "headers": [
             {
-              "name": "X-Goog-Generation",
-              "value": "1569837707444808"
+              "name": "Etag",
+              "value": "\"ddfbf45571e39379c2737ce754dadc47\""
             },
             {
-              "name": "X-Goog-Stored-Content-Length",
-              "value": "25"
+              "name": "Content-Type",
+              "value": "text/plain; charset=utf-8"
             },
             {
-              "name": "Content-Length",
-              "value": "25"
+              "name": "X-Goog-Hash",
+              "value": "crc32c=vOMu5Q=="
             },
             {
-              "name": "Age",
-              "value": "123"
-            },
-            {
-              "name": "Last-Modified",
-              "value": "Mon, 30 Sep 2019 10:01:47 GMT"
-            },
-            {
-              "name": "X-Goog-Stored-Content-Encoding",
-              "value": "identity"
-            },
-            {
-              "name": "Accept-Ranges",
-              "value": "bytes"
-            },
-            {
-              "name": "Cache-Control",
-              "value": "public, max-age=3600"
+              "name": "X-Goog-Hash",
+              "value": "md5=3fv0VXHjk3nCc3znVNrcRw=="
             },
             {
               "name": "Server",
@@ -63,62 +47,74 @@
             },
             {
               "name": "X-Guploader-Uploadid",
-              "value": "AEnB2Uo1cF3mggXnexsDdpXNsnXNuVenv1zSBsW_WTZ8rPDhuMaAjzn9Bfj7O0xi2vXV0-H3taoZ8ZR0wBue-afLLlY11Jm3Ag"
+              "value": "AEnB2Uq0Avt6JozmhVqxx0TaFts1IM2D2w4XgUfkDc6uJ4hdrQ70YOUW9zJ7UbjpXt3-yTrNVChpie92g4jROiwdSU-RL7rcuA"
             },
             {
               "name": "Date",
-              "value": "Thu, 03 Oct 2019 05:01:42 GMT"
-            },
-            {
-              "name": "Etag",
-              "value": "\"c4d22707e0d79bd01e33fe19a5e21487\""
-            },
-            {
-              "name": "X-Goog-Storage-Class",
-              "value": "REGIONAL"
-            },
-            {
-              "name": "Alt-Svc",
-              "value": "quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000"
-            },
-            {
-              "name": "Expires",
-              "value": "Thu, 03 Oct 2019 06:01:42 GMT"
+              "value": "Thu, 03 Oct 2019 10:58:24 GMT"
             },
             {
               "name": "X-Goog-Metageneration",
-              "value": "2"
+              "value": "1"
             },
             {
-              "name": "Content-Type",
-              "value": "text/plain"
+              "name": "Accept-Ranges",
+              "value": "bytes"
             },
             {
-              "name": "X-Goog-Hash",
-              "value": "crc32c=CrEDEg=="
+              "name": "Cache-Control",
+              "value": "private, max-age=0"
             },
             {
-              "name": "X-Goog-Hash",
-              "value": "md5=xNInB+DXm9AeM/4ZpeIUhw=="
+              "name": "Last-Modified",
+              "value": "Thu, 03 Oct 2019 08:26:55 GMT"
+            },
+            {
+              "name": "X-Goog-Generation",
+              "value": "1570091215037603"
+            },
+            {
+              "name": "X-Goog-Stored-Content-Length",
+              "value": "24"
+            },
+            {
+              "name": "Alt-Svc",
+              "value": "quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000"
+            },
+            {
+              "name": "Expires",
+              "value": "Thu, 03 Oct 2019 10:58:24 GMT"
+            },
+            {
+              "name": "X-Goog-Stored-Content-Encoding",
+              "value": "identity"
+            },
+            {
+              "name": "X-Goog-Storage-Class",
+              "value": "STANDARD"
+            },
+            {
+              "name": "Content-Length",
+              "value": "24"
             }
           ],
           "content": {
-            "size": 25,
-            "mimeType": "text/plain",
-            "text": "{\"message\": \"Hello Hoge\"}"
+            "size": 24,
+            "mimeType": "text/plain; charset=utf-8",
+            "text": "{\"message\":\"hello fake\"}"
           },
           "redirectURL": "",
           "headersSize": -1,
-          "bodySize": 25
+          "bodySize": 24
         },
         "cache": {},
         "timings": {
-          "blocked": -0.012133,
+          "blocked": -61.940605,
           "dns": -0.000001,
-          "connect": 0.00065,
-          "send": 0.111354,
-          "wait": 44.33395,
-          "receive": 0.151347,
+          "connect": 0.000863,
+          "send": 0.159839,
+          "wait": 154.137627,
+          "receive": 0.067222,
           "ssl": -0.000001
         }
       }
