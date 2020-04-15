@@ -3,9 +3,11 @@ module github.com/sinmetal/fake
 go 1.12
 
 require (
+	cloud.google.com/go v0.46.3
 	cloud.google.com/go/storage v1.1.0
 	github.com/creack/pty v1.1.9 // indirect
 	github.com/golang/groupcache v0.0.0-20191002201903-404acd9df4cc // indirect
+	github.com/golang/protobuf v1.3.2
 	github.com/google/go-cmp v0.3.1
 	github.com/google/pprof v0.0.0-20190930153522-6ce02741cba3 // indirect
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
@@ -25,7 +27,7 @@ require (
 	golang.org/x/tools v0.0.0-20191002234911-9ade4c73f2af // indirect
 	google.golang.org/api v0.10.0
 	google.golang.org/appengine v1.6.4 // indirect
-	google.golang.org/genproto v0.0.0-20191002211648-c459b9ce5143 // indirect
-	google.golang.org/grpc v1.24.0 // indirect
+	google.golang.org/genproto v0.0.0-20191002211648-c459b9ce5143
+	google.golang.org/grpc v1.24.0
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 )
