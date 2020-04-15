@@ -3,6 +3,7 @@ package cloudtasks
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"testing"
 
 	cloudtasks "cloud.google.com/go/cloudtasks/apiv2"
@@ -11,44 +12,62 @@ import (
 )
 
 func TestCreateTask(t *testing.T) {
-	var name string = "name3373707"
-	var dispatchCount int32 = 1217252086
-	var responseCount int32 = 424727441
-	var expectedResponse = &taskspb.Task{
-		Name:          name,
-		DispatchCount: dispatchCount,
-		ResponseCount: responseCount,
+	cases := []struct {
+		name      string
+		callCount int
+	}{
+		{"one", 1},
+		{"two", 2},
 	}
 
-	faker := NewFaker(t)
+	for _, tt := range cases {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			faker := NewFaker(t)
+			var expectedResponses []*taskspb.Task
+			for i := 0; i < tt.callCount; i++ {
+				var name string = fmt.Sprintf("name%d", rand.Int())
+				var dispatchCount int32 = 1217252086
+				var responseCount int32 = 424727441
+				var expectedResponse = &taskspb.Task{
+					Name:          name,
+					DispatchCount: dispatchCount,
+					ResponseCount: responseCount,
+				}
+				faker.AddMockResponse(nil, expectedResponse)
+				expectedResponses = append(expectedResponses, expectedResponse)
+			}
 
-	faker.mock.err = nil
-	faker.mock.resps = nil
+			var formattedParent string = fmt.Sprintf("projects/%s/locations/%s/queues/%s", "[PROJECT]", "[LOCATION]", "[QUEUE]")
+			var task *taskspb.Task = &taskspb.Task{}
+			var request = &taskspb.CreateTaskRequest{
+				Parent: formattedParent,
+				Task:   task,
+			}
 
-	faker.mock.resps = append(faker.mock.resps[:0], expectedResponse)
+			c, err := cloudtasks.NewClient(context.Background(), faker.ClientOpt)
+			if err != nil {
+				t.Fatal(err)
+			}
 
-	var formattedParent string = fmt.Sprintf("projects/%s/locations/%s/queues/%s", "[PROJECT]", "[LOCATION]", "[QUEUE]")
-	var task *taskspb.Task = &taskspb.Task{}
-	var request = &taskspb.CreateTaskRequest{
-		Parent: formattedParent,
-		Task:   task,
-	}
+			for i := 0; i < tt.callCount; i++ {
+				resp, err := c.CreateTask(context.Background(), request)
+				if err != nil {
+					t.Fatal(err)
+				}
 
-	c, err := cloudtasks.NewClient(context.Background(), faker.ClientOpt)
-	if err != nil {
-		t.Fatal(err)
-	}
+				if e, g := request, faker.mock.tasks[i].reqs[0]; !proto.Equal(e, g) {
+					t.Errorf("request want %q, but got %q", e, g)
+				}
 
-	resp, err := c.CreateTask(context.Background(), request)
-	if err != nil {
-		t.Fatal(err)
-	}
+				if e, g := expectedResponses[i], resp; !proto.Equal(e, g) {
+					t.Errorf("response want %q, but got %q)", e, g)
+				}
+			}
 
-	if want, got := request, faker.mock.reqs[0]; !proto.Equal(want, got) {
-		t.Errorf("wrong request %q, want %q", got, want)
-	}
-
-	if want, got := expectedResponse, resp; !proto.Equal(want, got) {
-		t.Errorf("wrong response %q, want %q)", got, want)
+			if e, g := tt.callCount, faker.mock.createTaskCallCount; e != g {
+				t.Errorf("createTaskCallCount want %v but got %v", e, g)
+			}
+		})
 	}
 }

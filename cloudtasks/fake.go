@@ -23,7 +23,7 @@ type Faker struct {
 func NewFaker(t *testing.T) *Faker {
 	t.Helper()
 
-	var mockCloudTasks mockCloudTasksServer
+	mockCloudTasks := mockCloudTasksServer{}
 
 	serv := grpc.NewServer()
 	taskspb.RegisterCloudTasksServer(serv, &mockCloudTasks)
@@ -45,19 +45,30 @@ func NewFaker(t *testing.T) *Faker {
 	}
 }
 
+func (f *Faker) AddMockResponse(err error, resp ...proto.Message) {
+	f.mock.tasks = append(f.mock.tasks, &mockTaskContainer{
+		err:  err,
+		resp: resp,
+	})
+}
+
+type mockTaskContainer struct {
+	reqs []proto.Message
+	err  error
+	resp []proto.Message
+}
+
 type mockCloudTasksServer struct {
 	// Embed for forward compatibility.
 	// Tests will keep working if more methods are added
 	// in the future.
 	taskspb.CloudTasksServer
 
-	reqs []proto.Message
+	tasks []*mockTaskContainer
 
-	// If set, all calls return this error.
-	err error
+	tasksIndex int
 
-	// responses to return if err == nil
-	resps []proto.Message
+	createTaskCallCount int
 }
 
 func (s *mockCloudTasksServer) CreateTask(ctx context.Context, req *taskspb.CreateTaskRequest) (*taskspb.Task, error) {
@@ -65,9 +76,15 @@ func (s *mockCloudTasksServer) CreateTask(ctx context.Context, req *taskspb.Crea
 	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
 		return nil, fmt.Errorf("x-goog-api-client = %v, expected gl-go key", xg)
 	}
-	s.reqs = append(s.reqs, req)
-	if s.err != nil {
-		return nil, s.err
+
+	task := s.tasks[s.tasksIndex]
+	s.tasksIndex++
+	s.createTaskCallCount++
+
+	task.reqs = append(task.reqs, req)
+	if task.err != nil {
+		return nil, task.err
 	}
-	return s.resps[0].(*taskspb.Task), nil
+
+	return task.resp[0].(*taskspb.Task), nil
 }
