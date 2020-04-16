@@ -45,11 +45,28 @@ func NewFaker(t *testing.T) *Faker {
 	}
 }
 
+// AddMockResponse is Set Response when CreateTask is called
+//
+// Setting err returns that err.
+// When returning a normal Response, err specifies nil.
 func (f *Faker) AddMockResponse(err error, resp ...proto.Message) {
 	f.mock.tasks = append(f.mock.tasks, &mockTaskContainer{
 		err:  err,
 		resp: resp,
 	})
+}
+
+// GetCreateTaskCallCount is Returns the number of times CreateTask was called
+func (f *Faker) GetCreateTaskCallCount() int {
+	return f.mock.createTaskCallCount
+}
+
+// GetCreateTaskRequest is Returns the request passed to CreateTask
+func (f *Faker) GetCreateTaskRequest(i int) ([]proto.Message, error) {
+	if i > len(f.mock.tasks)-1 {
+		return nil, fmt.Errorf("GetCreateTaskRequest out of range. len=%d", len(f.mock.tasks))
+	}
+	return f.mock.tasks[i].reqs, nil
 }
 
 type mockTaskContainer struct {

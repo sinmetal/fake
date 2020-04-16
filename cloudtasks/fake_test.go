@@ -1,10 +1,12 @@
-package cloudtasks
+package cloudtasks_test
 
 import (
 	"context"
 	"fmt"
 	"math/rand"
 	"testing"
+
+	. "github.com/sinmetal/fake/cloudtasks"
 
 	cloudtasks "cloud.google.com/go/cloudtasks/apiv2"
 	"github.com/golang/protobuf/proto"
@@ -57,7 +59,11 @@ func TestCreateTask(t *testing.T) {
 					t.Fatal(err)
 				}
 
-				if e, g := request, faker.mock.tasks[i].reqs[0]; !proto.Equal(e, g) {
+				req, err := faker.GetCreateTaskRequest(i)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if e, g := request, req[0]; !proto.Equal(e, g) {
 					t.Errorf("request want %q, but got %q", e, g)
 				}
 
@@ -66,7 +72,7 @@ func TestCreateTask(t *testing.T) {
 				}
 			}
 
-			if e, g := tt.callCount, faker.mock.createTaskCallCount; e != g {
+			if e, g := tt.callCount, faker.GetCreateTaskCallCount(); e != g {
 				t.Errorf("createTaskCallCount want %v but got %v", e, g)
 			}
 		})
