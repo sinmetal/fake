@@ -8,6 +8,7 @@ import (
 
 	cloudtasks "cloud.google.com/go/cloudtasks/apiv2"
 	"github.com/golang/protobuf/proto"
+	_ "github.com/sinmetal/fake/hook"
 	taskspb "google.golang.org/genproto/googleapis/cloud/tasks/v2"
 )
 
