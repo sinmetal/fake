@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"cloud.google.com/go/storage"
-	"github.com/sinmetal/fake/hook"
 	"github.com/sinmetal/fake/hook/hars"
 	"github.com/vvakame/go-harlog"
 	"golang.org/x/oauth2/google"
@@ -41,35 +40,6 @@ func TestGetObject(t *testing.T) {
 		t.Fatal(err)
 	}
 	fmt.Printf("%+v", string(body))
-}
-
-// TestRealGetObject is 実際にCloud StorageにGetを投げてResponseの内容に変更がないかをチェックする
-func TestRealGetObject(t *testing.T) {
-	ctx := context.Background()
-
-	hc, err := google.DefaultClient(ctx, storage.ScopeReadWrite)
-	if err != nil {
-		panic(err)
-	}
-
-	hooker := hook.NewHooker(t)
-	hooker.Transport.Transport = hc.Transport
-	hc.Transport = hooker.Transport
-	stg, err := storage.NewClient(ctx, option.WithHTTPClient(hc))
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	_, err = stg.Bucket("sinmetal-ci-fake").Object("hoge.txt").NewReader(ctx)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	req := hooker.GetRequest()
-	hook.CompareHookRequest(t, "object.get.request.golden", req)
-
-	resp := hooker.GetResponse()
-	hook.CompareHookResponse(t, "object.get.response.golden", resp)
 }
 
 func TestRealGetObjectHar(t *testing.T) {
