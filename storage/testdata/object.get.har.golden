@@ -7,8 +7,8 @@
     },
     "entries": [
       {
-        "startedDateTime": "2020-04-16T15:57:49+09:00",
-        "time": 668.299236,
+        "startedDateTime": "2020-07-20T17:40:33+09:00",
+        "time": 845.435194,
         "request": {
           "method": "GET",
           "url": "https://storage.googleapis.com/sinmetal-ci-fake/hoge.txt",
@@ -26,48 +26,52 @@
           "cookies": [],
           "headers": [
             {
-              "name": "X-Goog-Generation",
-              "value": "1570091215037603"
+              "name": "Content-Type",
+              "value": "text/plain; charset=utf-8"
             },
             {
-              "name": "X-Goog-Metageneration",
-              "value": "1"
+              "name": "Content-Length",
+              "value": "24"
             },
             {
               "name": "Cache-Control",
               "value": "private, max-age=0"
             },
             {
-              "name": "Etag",
-              "value": "\"ddfbf45571e39379c2737ce754dadc47\""
+              "name": "Last-Modified",
+              "value": "Thu, 03 Oct 2019 08:26:55 GMT"
             },
             {
-              "name": "X-Goog-Stored-Content-Length",
-              "value": "24"
+              "name": "X-Goog-Generation",
+              "value": "1570091215037603"
             },
             {
-              "name": "Content-Type",
-              "value": "text/plain; charset=utf-8"
+              "name": "X-Goog-Stored-Content-Encoding",
+              "value": "identity"
             },
             {
-              "name": "X-Guploader-Uploadid",
-              "value": "AEnB2Ur4NyAr85j9OXlpMUW2bsOYGlcEAlSi39fRPCtITBvOE_G3Y8wkIzt7KqIQa88Yf-0g5q-FkudovZ5WSYPTGubENflP1A"
-            },
-            {
-              "name": "Expires",
-              "value": "Thu, 16 Apr 2020 06:57:50 GMT"
-            },
-            {
-              "name": "Accept-Ranges",
-              "value": "bytes"
+              "name": "Date",
+              "value": "Mon, 20 Jul 2020 08:40:34 GMT"
             },
             {
               "name": "Server",
               "value": "UploadServer"
             },
             {
-              "name": "Alt-Svc",
-              "value": "quic=\":443\"; ma=2592000; v=\"46,43\",h3-Q050=\":443\"; ma=2592000,h3-Q049=\":443\"; ma=2592000,h3-Q048=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000"
+              "name": "X-Goog-Storage-Class",
+              "value": "STANDARD"
+            },
+            {
+              "name": "Expires",
+              "value": "Mon, 20 Jul 2020 08:40:34 GMT"
+            },
+            {
+              "name": "X-Goog-Metageneration",
+              "value": "1"
+            },
+            {
+              "name": "X-Goog-Stored-Content-Length",
+              "value": "24"
             },
             {
               "name": "X-Goog-Hash",
@@ -78,24 +82,20 @@
               "value": "md5=3fv0VXHjk3nCc3znVNrcRw=="
             },
             {
-              "name": "X-Goog-Storage-Class",
-              "value": "STANDARD"
+              "name": "X-Guploader-Uploadid",
+              "value": "AAANsUkHOWFuo9Ef_WYUnneEBOd2OSZZgpSJNg1-GHTy_2N5-Xkku-73INHnIT9zhayQZ-86_e4gS4PlD8QMWOkg8hFhMQpuXg"
             },
             {
-              "name": "X-Goog-Stored-Content-Encoding",
-              "value": "identity"
+              "name": "Etag",
+              "value": "\"ddfbf45571e39379c2737ce754dadc47\""
             },
             {
-              "name": "Content-Length",
-              "value": "24"
+              "name": "Accept-Ranges",
+              "value": "bytes"
             },
             {
-              "name": "Date",
-              "value": "Thu, 16 Apr 2020 06:57:50 GMT"
-            },
-            {
-              "name": "Last-Modified",
-              "value": "Thu, 03 Oct 2019 08:26:55 GMT"
+              "name": "Alt-Svc",
+              "value": "h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-25=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\""
             }
           ],
           "content": {
@@ -109,13 +109,13 @@
         },
         "cache": {},
         "timings": {
-          "blocked": -282.077503,
-          "dns": 0.847318,
-          "connect": 53.894856,
-          "send": 0.039339,
-          "wait": 332.141602,
-          "receive": 0.145936,
-          "ssl": 44.384648
+          "blocked": -275.575738,
+          "dns": 14.073804,
+          "connect": 69.895612,
+          "send": 0.043091,
+          "wait": 499.842797,
+          "receive": 0.077956,
+          "ssl": 48.015893
         }
       }
     ]
