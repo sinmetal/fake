@@ -9,7 +9,7 @@ import (
 	. "github.com/sinmetal/fake/cloudtasks"
 
 	cloudtasks "cloud.google.com/go/cloudtasks/apiv2"
-	"github.com/golang/protobuf/proto"
+	"google.golang.org/protobuf/proto"
 	_ "github.com/sinmetal/fake/hook"
 	taskspb "google.golang.org/genproto/googleapis/cloud/tasks/v2"
 )
